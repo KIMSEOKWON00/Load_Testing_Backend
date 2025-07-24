@@ -40,6 +40,13 @@ class RedisClient {
           if (times > 3) return null;
           return Math.min(times * 1000, 3000);
         },
+        dnsLookup: (address, callback) => callback(null, address), // IP 그대로 사용
+        natMap: {
+          // 클러스터가 리턴한 내부 IP를 → 실제 접근 가능한 public/private IP로 매핑
+          '172.31.7.74:6379': '172.31.7.74:7001',
+          '172.31.14.246:6379': '172.31.14.246:7002',
+          '172.31.1.217:6379': '172.31.1.217:7003',
+        },
         enableReadyCheck: true,
         scaleReads: 'slave',
         maxRedirections: 3,
