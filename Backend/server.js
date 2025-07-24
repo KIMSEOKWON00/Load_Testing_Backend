@@ -28,10 +28,12 @@ const corsOptions = {
       'https://localhost:3000',
       'http://0.0.0.0:3000',
       'https://0.0.0.0:3000',
-      'http://chat.goorm-ktb-001.goorm.team',
-      'https://chat.goorm-ktb-001.goorm.team',
-      'http://api.chat.goorm-ktb-001.goorm.team',
-      'https://api.chat.goorm-ktb-001.goorm.team'
+      'http://chat.goorm-ktb-021.goorm.team',
+      'https://chat.goorm-ktb-021.goorm.team',
+      'http://api.chat.goorm-ktb-021.goorm.team',
+      'https://api.chat.goorm-ktb-021.goorm.team',
+      'https://load-test-537582031.ap-northeast-2.elb.amazonaws.com',
+      'http://load-test-537582031.ap-northeast-2.elb.amazonaws.com'
     ];
 
     // origin이 없는 경우(서버 간 요청) 허용
