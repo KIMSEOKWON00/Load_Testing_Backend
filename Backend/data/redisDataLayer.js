@@ -68,6 +68,7 @@ async function deleteUser(userId) {
 
 // Room 관련
 async function createRoom(name, creatorUserId, password = null) {
+    console.log('[redisDataLayer] createRoom called', { name, creatorUserId, password });
     const roomId = uuidv4();
     const hasPassword = !!password;
     const roomData = {
@@ -82,12 +83,17 @@ async function createRoom(name, creatorUserId, password = null) {
         roomData.password = await bcrypt.hash(password, salt);
     }
 
-    await Promise.all([
-        redisClient.hSet(`room:${roomId}`, roomData),
-        redisClient.sAdd(`room:${roomId}:participants`, creatorUserId), // 단일 값 추가
-        redisClient.sAdd('room:all', roomId) // 단일 값 추가
-    ]);
-
+    try {
+      await Promise.all([
+          redisClient.hSet(`room:${roomId}`, roomData),
+          redisClient.sAdd(`room:${roomId}:participants`, creatorUserId), // 단일 값 추가
+          redisClient.sAdd('room:all', roomId)
+      ]);
+      console.log('[redisDataLayer] createRoom success', { roomId, roomData });
+    } catch (err) {
+      console.error('[redisDataLayer] createRoom error', err);
+      throw err;
+    }
     return roomId;
 }
 
@@ -96,29 +102,52 @@ async function getAllRoomIds() {
 }
 
 async function getRoomById(roomId) {
-    const [room, participants] = await Promise.all([
-        redisClient.hGetAll(`room:${roomId}`),
-        redisClient.sMembers(`room:${roomId}:participants`) // sMembers 사용
-    ]);
-
-    if (!room || Object.keys(room).length === 0) return null;
-    
-    return {
-        id: roomId,
-        name: room.name,
-        creator: room.creator,
-        hasPassword: room.hasPassword === '1',
-        createdAt: new Date(parseInt(room.createdAt, 10)),
-        participants: participants || []
-    };
+    console.log('[redisDataLayer] getRoomById called', { roomId });
+    try {
+      const [room, participants] = await Promise.all([
+          redisClient.hGetAll(`room:${roomId}`),
+          redisClient.sMembers(`room:${roomId}:participants`)
+      ]);
+      console.log('[redisDataLayer] getRoomById raw', { room, participants });
+      if (!room || Object.keys(room).length === 0) return null;
+      const result = {
+          id: roomId,
+          name: room.name,
+          creator: room.creator,
+          hasPassword: room.hasPassword === '1',
+          createdAt: new Date(parseInt(room.createdAt, 10)),
+          participants: participants || []
+      };
+      console.log('[redisDataLayer] getRoomById result', result);
+      return result;
+    } catch (err) {
+      console.error('[redisDataLayer] getRoomById error', err);
+      throw err;
+    }
 }
 
 async function addParticipant(roomId, userId) {
-    return redisClient.sAdd(`room:${roomId}:participants`, userId);
+    console.log('[redisDataLayer] addParticipant called', { roomId, userId });
+    try {
+      const result = await redisClient.sAdd(`room:${roomId}:participants`, userId);
+      console.log('[redisDataLayer] addParticipant result', { roomId, userId, result });
+      return result;
+    } catch (err) {
+      console.error('[redisDataLayer] addParticipant error', err);
+      throw err;
+    }
 }
 
 async function removeParticipant(roomId, userId) {
-    return redisClient.sRem(`room:${roomId}:participants`, userId);
+    console.log('[redisDataLayer] removeParticipant called', { roomId, userId });
+    try {
+      const result = await redisClient.sRem(`room:${roomId}:participants`, userId);
+      console.log('[redisDataLayer] removeParticipant result', { roomId, userId, result });
+      return result;
+    } catch (err) {
+      console.error('[redisDataLayer] removeParticipant error', err);
+      throw err;
+    }
 }
 
 async function checkRoomPassword(roomId, password) {
