@@ -240,13 +240,12 @@ exports.uploadProfileImage = async (req, res) => {
 
     // 새 이미지 경로 저장
     const imageUrl = `/uploads/${req.file.filename}`;
-    user.profileImage = imageUrl;
-    await user.save();
+    await user.updateProfile({ profileImage: imageUrl });
 
     res.json({
       success: true,
       message: '프로필 이미지가 업데이트되었습니다.',
-      imageUrl: user.profileImage
+      imageUrl: imageUrl
     });
 
   } catch (error) {
