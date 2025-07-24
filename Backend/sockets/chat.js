@@ -306,7 +306,24 @@ module.exports = function (io) {
         // 방 정보 조회
         let room = await redisDataLayer.getRoomById(roomId);
         if (!room) {
+          // 방이 아예 없을 때 전체 방 목록도 출력
+          const allRoomIds = await (redisDataLayer.getAllRoomIds?.() || []);
+          console.error(`[joinRoom] Room not found`, {
+            roomId,
+            userId: socket.user.id,
+            allRoomIds,
+            roomResult: room
+          });
           throw new Error('채팅방을 찾을 수 없습니다.');
+        } else {
+          // participants가 비정상일 때도 로그
+          if (!Array.isArray(room.participants)) {
+            console.error(`[joinRoom] Room participants is not array`, {
+              roomId,
+              userId: socket.user.id,
+              participants: room.participants
+            });
+          }
         }
 
         // 해당 유저 참가자 목록에 추가
