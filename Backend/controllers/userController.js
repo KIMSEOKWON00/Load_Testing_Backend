@@ -136,30 +136,31 @@ exports.getProfile = async (req, res) => {
 
 // 프로필 정보 업데이트 함수
 exports.updateProfile = async (req, res) => {
+  console.log('[updateProfile] called', { userId: req.user.id, body: req.body });
   try {
     const { name } = req.body;
 
-    // 이름 유효성 검사
     if (!name || name.trim().length === 0) {
+      console.warn('[updateProfile] name missing or empty', { name });
       return res.status(400).json({
         success: false,
         message: '이름을 입력해주세요.'
       });
     }
 
-    // 사용자 조회
     const user = await User.findById(req.user.id);
+    console.log('[updateProfile] loaded user', user);
     if (!user) {
+      console.warn('[updateProfile] user not found', { userId: req.user.id });
       return res.status(404).json({
         success: false,
         message: '사용자를 찾을 수 없습니다.'
       });
     }
 
-    // 이름 업데이트 및 저장
     await user.updateProfile({ name: name.trim() });
+    console.log('[updateProfile] user updated', { userId: user._id, name: name.trim() });
 
-    // 업데이트된 정보 반환
     res.json({
       success: true,
       message: '프로필이 업데이트되었습니다.',
@@ -172,7 +173,7 @@ exports.updateProfile = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Update profile error:', error);
+    console.error('[updateProfile] error', error);
     res.status(500).json({
       success: false,
       message: '프로필 업데이트 중 오류가 발생했습니다.'
