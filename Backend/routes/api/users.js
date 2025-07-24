@@ -22,7 +22,10 @@ router.put('/profile',
 );
 
 // 프로필 이미지 업로드
-router.post('/profile-image',
+router.post('/profile-image', (req, res, next) => {
+  console.log('profile-image POST 요청 도착');
+  next();
+},
   auth,
   upload.single('profileImage'),
   userController.uploadProfileImage
@@ -73,6 +76,15 @@ router.use((err, req, res, next) => {
     success: false,
     message: '서버 에러가 발생했습니다.',
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+// Global error handler for users router
+router.use((err, req, res, next) => {
+  console.error('Global users router error handler:', err);
+  res.status(500).json({
+    success: false,
+    message: err.message || '서버 에러가 발생했습니다.'
   });
 });
 

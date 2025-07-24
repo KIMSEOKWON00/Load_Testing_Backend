@@ -183,6 +183,7 @@ exports.updateProfile = async (req, res) => {
 
 // 프로필 이미지 업로드 함수
 exports.uploadProfileImage = async (req, res) => {
+  console.log('uploadProfileImage 함수 진입');
   try {
     // 파일 존재 여부 확인
     if (!req.file) {

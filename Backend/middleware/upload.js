@@ -152,6 +152,7 @@ const uploadMiddleware = multer({
 
 // 파일 업로드 에러 처리 미들웨어
 const errorHandler = (error, req, res, next) => {
+  console.error('File upload error middleware:', error);
   console.error('File upload error:', {
     error: error.message,
     stack: error.stack,
