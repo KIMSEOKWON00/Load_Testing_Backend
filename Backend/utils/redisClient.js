@@ -13,15 +13,15 @@ class RedisClient {
       this.cluster = new Redis.Cluster([
         {
           host: process.env.REDIS_MASTER1,
-          port: 7001
+          port: 6379
         },
         {
           host: process.env.REDIS_MASTER2,
-          port: 7002
+          port: 6379
         },
         {
           host: process.env.REDIS_MASTER3,
-          port: 7003
+          port: 6379
         }
       ], {
         redisOptions: {

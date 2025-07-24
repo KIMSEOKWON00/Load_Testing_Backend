@@ -10,9 +10,9 @@ module.exports = {
   encryptionKey: process.env.ENCRYPTION_KEY || DEFAULT_ENCRYPTION_KEY,
   passwordSalt: process.env.PASSWORD_SALT || DEFAULT_PASSWORD_SALT,
   redisNodes: [
-    { host: process.env.REDIS_MASTER1, port: 7001 },  // master1
-    { host: process.env.REDIS_MASTER2, port: 7002 },   // master2
-    { host: process.env.REDIS_MASTER3, port: 7003 }   // master3
+    { host: process.env.REDIS_MASTER1, port: 6379 },  // master1
+    { host: process.env.REDIS_MASTER2, port: 6379 },   // master2
+    { host: process.env.REDIS_MASTER3, port: 6379 }   // master3
 
   ],
   openaiApiKey: process.env.OPENAI_API_KEY,
