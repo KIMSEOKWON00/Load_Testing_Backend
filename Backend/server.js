@@ -24,14 +24,17 @@ const corsOptions = {
   origin: function(origin, callback) {
     const allowedOrigins = [
       'https://bootcampchat-fe.run.goorm.site',
+      'https://bootcampchat-hgxbv.dev-k8s.arkain.io',
       'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
       'https://localhost:3000',
+      'https://localhost:3001',
+      'https://localhost:3002',
       'http://0.0.0.0:3000',
       'https://0.0.0.0:3000',
-      'http://chat.goorm-ktb-001.goorm.team',
-      'https://chat.goorm-ktb-001.goorm.team',
-      'http://api.chat.goorm-ktb-001.goorm.team',
-      'https://api.chat.goorm-ktb-001.goorm.team'
+      'https://www.goorm-ktb-021.goorm.team',
+      'https://load-test-537582031.ap-northeast-2.elb.amazonaws.com'
     ];
 
     // origin이 없는 경우(서버 간 요청) 허용
