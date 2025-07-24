@@ -157,8 +157,7 @@ exports.updateProfile = async (req, res) => {
     }
 
     // 이름 업데이트 및 저장
-    user.name = name.trim();
-    await user.save();
+    await user.updateProfile({ name: name.trim() });
 
     // 업데이트된 정보 반환
     res.json({
@@ -166,7 +165,7 @@ exports.updateProfile = async (req, res) => {
       message: '프로필이 업데이트되었습니다.',
       user: {
         id: user._id,
-        name: user.name,
+        name: name.trim(),
         email: user.email,
         profileImage: user.profileImage
       }
